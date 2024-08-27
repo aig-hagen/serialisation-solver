@@ -237,6 +237,10 @@ int main(int argc, char ** argv) {
 					break;
 				case PR:
 					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, true);
+					break;
+				case CO:
+					Algorithms::enumerate_sequences_complete(aaf, active_arguments);
+					break;
 				default:
 					break;
 			}

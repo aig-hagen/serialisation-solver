@@ -3,17 +3,16 @@
 
 namespace Algorithms {
     std::vector<std::vector<uint32_t>> enumerate_initial(const AF & af, const IterableBitSet & active_arguments) {
-        std::vector<std::vector<uint32_t>> result;
+        if (active_arguments._array.empty()) {
+            return {};
+        }
 
+        std::vector<std::vector<uint32_t>> result;
         std::vector<uint32_t> extension;
         std::vector<int32_t> complement_clause;
         complement_clause.reserve(active_arguments._array.size());
         std::vector<int32_t> minimization_clause;
         minimization_clause.reserve(active_arguments._array.size());
-
-        if (active_arguments._array.empty()) {
-            return result;
-        }
 
         SAT_Solver solver = SAT_Solver(af.args);
         Encodings::admissible_nonempty(af, active_arguments, solver);
