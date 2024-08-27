@@ -40,6 +40,7 @@ Options:
 ```
 
 Example usage:
+
 To enumerate the preferred serialisation sequences, use
 ```
   ./serial-solver -p ES-PR -fo tgf -f <file in TGF format>
