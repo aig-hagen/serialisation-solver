@@ -87,7 +87,7 @@ void print_formats() {
 }
 
 void print_problems() {
-	std::cout << "[ES-AD]\n";
+	std::cout << "[ES-AD,ES-PR,ES-SA,ES-GR,ES-CO,ES-ST,EE-IT]\n";
 }
 
 int main(int argc, char ** argv) {

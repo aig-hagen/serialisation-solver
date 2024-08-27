@@ -21,12 +21,13 @@ To compile the solver use
   make
 ```
 
-## Command-line usage TODO update
+The binary can be found under `build/bin/serial-solver`
+
+## Command-line usage
 
 ```
-./solver.sh <algorithm> -p <task> -f <file> -fo <format>
+./serial-solver -p <task> -f <file> -fo <format>
   
-  <algorithm> the algorithm for computation, one of: [iaq,eee,see,seem,fudge]
   <task>      computational problem
   <file>      input argumentation framework
   <format>    file format for input AF
@@ -39,12 +40,8 @@ Options:
 ```
 
 Example usage:
+To enumerate the preferred serialisation sequences, use
 ```
-  ./solver.sh iaq -p EC-PR -fo tgf -f <file in TGF format>
-```
-
-Alternatively, you can also directly call the binary for each algorithm, e.g.
-```
-  ./build/bin/<algorithm>/solver -p EC-PR -fo tgf -f <file in TGF format>
+  ./serial-solver -p ES-PR -fo tgf -f <file in TGF format>
 ```
 
