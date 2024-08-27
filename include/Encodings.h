@@ -2,6 +2,7 @@
 #define ENCODINGS_H
 
 #include "AF.h"
+#include "IterableBitSet.h"
 
 #include "CadicalSatSolver.h"
 typedef CadicalSatSolver SAT_Solver;

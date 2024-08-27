@@ -1,7 +1,5 @@
 #include "CadicalSatSolver.h"
 
-#include <iostream>
-
 
 CadicalSatSolver::CadicalSatSolver(int32_t n_args) {
     solver = new CaDiCaL::Solver;

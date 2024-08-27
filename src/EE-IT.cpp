@@ -1,5 +1,6 @@
 #include "Algorithms.h"
 
+
 namespace Algorithms {
     std::vector<std::vector<uint32_t>> enumerate_initial(const AF & af, const IterableBitSet & active_arguments) {
         std::vector<std::vector<uint32_t>> result;
@@ -14,7 +15,7 @@ namespace Algorithms {
             return result;
         }
 
-        SAT_Solver solver = SAT_Solver(active_arguments._array.size());
+        SAT_Solver solver = SAT_Solver(af.args);
         Encodings::admissible_nonempty(af, active_arguments, solver);
 
         while (true) {
@@ -32,9 +33,9 @@ namespace Algorithms {
                         solver.assume(-af.accepted_var[arg]);
                     }
                 }
-                if (minimization_clause.size() == 1) {
-                    break;
-                }
+                //if (minimization_clause.size() == 1) {
+                //    break;
+                //}
                 solver.add_clause(minimization_clause);
             }
             if (found_extension) {

@@ -30,8 +30,8 @@
  * THE SOFTWARE.
  */
 
-#include <iostream>
 #include "AF.h"
+
 
 AF::AF() : args(0), count(0), attacks(0) {}
 
@@ -80,35 +80,4 @@ void AF::initialize_vars() {
 	for (uint32_t i = 0; i < args; i++) {
 		rejected_var[i] = ++count;
 	}
-}
-
-IterableBitSet AF::get_reduct(const IterableBitSet & active_arguments, const std::vector<uint32_t> & arguments) {
-    std::vector<uint32_t> reduct_array;
-    std::vector<uint8_t> reduct_bitset;
-    reduct_bitset.resize(args);
-
-    for (uint32_t arg1 : active_arguments._array) {
-        bool is_reduced = false;
-        for (uint32_t arg2 : arguments) {
-            if (arg1 == arg2) {
-                is_reduced = true;
-                break;
-            }
-            for (uint32_t arg3 : attacked[arg2]) {
-                if (arg1 == arg3) {
-                    is_reduced = true;
-                    break;
-                }
-            }
-            if (is_reduced) {
-                break;
-            }
-        }
-        if (!is_reduced) {
-            reduct_array.push_back(arg1);
-            reduct_bitset[arg1] = true;
-        }
-    }
-
-    return IterableBitSet(reduct_array, reduct_bitset);
 }

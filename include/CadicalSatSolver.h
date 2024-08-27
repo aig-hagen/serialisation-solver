@@ -1,7 +1,10 @@
 #ifndef CADICAL_H
 #define CADICAL_H
 
+#include <iostream>
+
 #include <cadical.hpp>
+
 
 const int ERROR_V = 0;
 const int SAT_V = 10;

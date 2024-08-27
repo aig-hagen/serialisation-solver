@@ -1,13 +1,12 @@
 #ifndef AF_H
 #define AF_H
 
+#include <iostream>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
 #include <string>
 #include <cstdint>     		// uncomment if boostlibs are not installed
-
-#include "Util.h"
 
 enum task { ES, EE, UNKNOWN_TASK };
 enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
@@ -90,8 +89,26 @@ void add_attack(std::pair<std::string,std::string> att);
 void initialize_attackers();
 void initialize_vars();
 
-IterableBitSet get_reduct(const IterableBitSet & active_arguments, const std::vector<uint32_t> & arguments);
-
 };
+
+namespace std {
+	inline void print_extension(const AF & af, const std::vector<uint32_t> & extension) {
+		std::cout << "[";
+		for (size_t i = 0; i < extension.size(); i++) {
+			std::cout << af.int_to_arg[extension[i]];
+			if (i != extension.size()-1) std::cout << ",";
+		}
+		std::cout << "]";
+  	}
+
+  	inline void print_sequence(const AF & af, std::vector<std::vector<uint32_t>> sequence) {
+		std::cout << "(";
+		for (size_t i = 0; i < sequence.size(); i++) {
+			print_extension(af, sequence[i]);
+			if (i != sequence.size()-1) std::cout << ",";
+		}
+		std::cout << ")";
+  	}
+}
 
 #endif

@@ -44,15 +44,6 @@ static int usage_flag = 0;
 static int formats_flag = 0;
 static int problems_flag = 0;
 
-void print_extension_ee(const AF & af, const std::vector<uint32_t> & extension) {
-	std::cout << "[";
-	for (uint32_t i = 0; i < extension.size(); i++) {
-		std::cout << af.int_to_arg[extension[i]];
-		if (i != extension.size()-1) std::cout << ",";
-	}
-	std::cout << "],";
-}
-
 task string_to_task(std::string problem) {
 	std::string tmp = problem.substr(0, problem.find("-"));
 	if (tmp == "ES") return ES;
@@ -240,12 +231,22 @@ int main(int argc, char ** argv) {
 	std::vector<std::vector<uint32_t>> result;
 	switch (string_to_task(task)) {
 		case ES: // TODO what if st(F) = \emptyset
-			
+			switch (string_to_sem(task)) {
+				case AD:
+					Algorithms::enumerate_sequences_admissible(aaf, active_arguments);
+					break;
+				default:
+					break;
+			}
 			break;
 		case EE:
 			switch (string_to_sem(task)) {
 			case IT:
 				result = Algorithms::enumerate_initial(aaf, active_arguments);
+				for (const std::vector<uint32_t> & ext : result) {
+					print_extension(aaf, ext);
+					std::cout << ",";
+				}
 				break;
 			
 			default:
@@ -255,9 +256,6 @@ int main(int argc, char ** argv) {
 		default:
 			std::cerr << argv[0] << ": Problem not supported!\n";
 			return 1;
-	}
-	for (const std::vector<uint32_t> & ext : result) {
-		print_extension_ee(aaf, ext);
 	}
 	std::cout << "\n";
 
