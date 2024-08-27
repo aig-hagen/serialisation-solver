@@ -233,8 +233,10 @@ int main(int argc, char ** argv) {
 		case ES: // TODO what if st(F) = \emptyset
 			switch (string_to_sem(task)) {
 				case AD:
-					Algorithms::enumerate_sequences_admissible(aaf, active_arguments);
+					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, false);
 					break;
+				case PR:
+					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, true);
 				default:
 					break;
 			}
