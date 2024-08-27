@@ -70,8 +70,7 @@ uint32_t count;
 std::vector<std::string> int_to_arg;
 std::unordered_map<std::string,uint32_t> arg_to_int;
 
-std::vector<std::vector<uint32_t>> attackers;
-std::vector<std::vector<uint32_t>> attacked;
+std::vector<std::vector<uint8_t>> attackers;
 
 std::vector<int> accepted_var;
 std::vector<int> rejected_var;

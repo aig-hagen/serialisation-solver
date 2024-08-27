@@ -46,13 +46,11 @@ void AF::add_attack(std::pair<std::string,std::string> att) {
 	}
 	uint32_t source = arg_to_int[att.first];
 	uint32_t target = arg_to_int[att.second];
-	attackers[target].push_back(source);
-	attacked[source].push_back(target);
+	attackers[target][source] = true;
 }
 
 void AF::initialize_attackers() {
-	attackers.resize(args);
-	attacked.resize(args);
+	attackers.resize(args, std::vector<uint8_t>(args));
 }
 
 void AF::initialize_vars() {

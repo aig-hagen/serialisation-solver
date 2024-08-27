@@ -16,36 +16,34 @@ namespace std {
     inline IterableBitSet get_reduct(const AF & af, const IterableBitSet & active_arguments, const std::vector<uint32_t> & arguments) {
         /*
         active_arguments - arguments
-        active_arguments - attackers[a] (for each a in arguments)
+        active_arguments - attacked[a] (for each a in arguments)
         
         */
         std::vector<uint32_t> reduct_array;
         std::vector<uint8_t> reduct_bitset;
         reduct_bitset.resize(af.args);
 
+    
         for (uint32_t arg1 : active_arguments._array) {
             bool is_reduced = false;
-            for (uint32_t arg2 : arguments) {
-                if (arg1 == arg2) {
-                    is_reduced = true;
-                    break;
-                }
-                for (uint32_t arg3 : af.attacked[arg2]) {
-                    if (arg1 == arg3) {
+            for (const uint32_t & arg : arguments) {
+                 is_reduced = arg == arg1;
+
+                if (is_reduced) break;
+                
+                for (uint32_t arg2 : arguments) {
+                    if (af.attackers[arg1][arg2]) {
                         is_reduced = true;
                         break;
                     }
                 }
-                if (is_reduced) {
-                    break;
-                }
+                if (is_reduced) break;
             }
             if (!is_reduced) {
                 reduct_array.push_back(arg1);
                 reduct_bitset[arg1] = true;
             }
         }
-
         return IterableBitSet(reduct_array, reduct_bitset);
     }
 }

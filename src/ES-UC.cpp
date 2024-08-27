@@ -6,24 +6,22 @@ namespace Algorithms {
         std::vector<std::vector<uint32_t>> initial_sets = enumerate_initial(af, active_arguments);
         for (const std::vector<uint32_t> & set : initial_sets) {
             bool is_challenged = false;
-            std::vector<uint8_t> attackers(af.args);
-            for (const uint32_t & arg : set) {
-                for (const u_int32_t & att : af.attackers[arg]) {
-                    attackers[att] = active_arguments._bitset[att]; // TODO bitwise AND between attackers and active_arguments
+            std::vector<uint8_t> attackers(af.args, true);
+            for (const uint32_t & arg1 : set) {
+                for (const uint32_t & arg2 : active_arguments._array) {
+                    attackers[arg2] |= af.attackers[arg1][arg2] && active_arguments._bitset[arg2];
                 }
             }
             for (const std::vector<uint32_t> & set2 : initial_sets) {
                 for (const uint32_t & arg : set2) {
-                    if (attackers[arg]) { // TODO bitwise AND between set2 and attackers and then check if non-ZERO
+                    if (attackers[arg]) {
                         is_challenged = true;
                         break;
                     }
                 }
                 if (is_challenged) break;
             }
-            if (is_challenged) {
-                continue;
-            }
+            if (is_challenged) continue;
 
             is_maximal = false;
             std::vector<std::vector<uint32_t>> new_sequence(sequence.size()+1);

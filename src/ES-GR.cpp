@@ -5,8 +5,8 @@ namespace Algorithms {
         bool is_maximal = true;
         for (const uint32_t & arg : active_arguments._array) {
             bool unattacked = true;
-            for (const uint32_t & att : af.attackers[arg]) {
-                if (active_arguments._bitset[att]) {
+            for (const uint32_t & att : active_arguments._array) {
+                if (af.attackers[arg][att]) {
                     unattacked = false;
                     break;
                 }

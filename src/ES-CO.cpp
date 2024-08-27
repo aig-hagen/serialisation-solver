@@ -5,15 +5,15 @@ namespace Algorithms {
         bool has_unattacked_initialset = false;
         std::vector<std::vector<uint32_t>> initial_sets = enumerate_initial(af, active_arguments);
         for (const std::vector<uint32_t> & set : initial_sets) {
-            if (set.size() == 1) {
+            if (set.size() == 1 && !has_unattacked_initialset) {
                 bool is_attacked = false;
-                for (const uint32_t & arg : af.attackers[set[0]]) {
-                    if (active_arguments._bitset[arg]) {
+                for (const uint32_t & arg : active_arguments._array) {
+                    if (af.attackers[set[0]][arg]) {
                         is_attacked = true;
                         break;
                     }
                 }
-                has_unattacked_initialset |= !is_attacked;
+                has_unattacked_initialset = !is_attacked;
             }
             std::vector<std::vector<uint32_t>> new_sequence(sequence.size()+1);
             for (size_t i = 0; i < sequence.size(); i++) {
