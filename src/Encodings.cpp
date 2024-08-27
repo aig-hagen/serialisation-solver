@@ -9,8 +9,8 @@ namespace Encodings {
 			solver.add_clause_2(-af.accepted_var[arg], -af.rejected_var[arg]);
 
 			std::vector<int32_t> out_clause;
-			for (uint32_t j = 0; j < af.attackers[arg].size(); j++) {
-				if (active_arguments._bitset[j]) {
+			for (size_t j = 0; j < af.attackers[arg].size(); j++) {
+				if (active_arguments._bitset[af.attackers[arg][j]]) {
 					solver.add_clause_2(-af.accepted_var[arg], af.rejected_var[af.attackers[arg][j]]);
 					out_clause.push_back(af.accepted_var[af.attackers[arg][j]]);
 				}

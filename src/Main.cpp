@@ -241,6 +241,9 @@ int main(int argc, char ** argv) {
 				case CO:
 					Algorithms::enumerate_sequences_complete(aaf, active_arguments);
 					break;
+				case ST:
+					Algorithms::enumerate_sequences_stable(aaf, active_arguments);
+					break;
 				default:
 					break;
 			}
