@@ -238,6 +238,12 @@ int main(int argc, char ** argv) {
 				case PR:
 					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, true);
 					break;
+				case SA:
+					Algorithms::enumerate_sequences_strong_admissible(aaf, active_arguments, false);
+					break;
+				case GR:
+					Algorithms::enumerate_sequences_strong_admissible(aaf, active_arguments, true);
+					break;
 				case CO:
 					Algorithms::enumerate_sequences_complete(aaf, active_arguments);
 					break;

@@ -6,6 +6,7 @@
 namespace Algorithms {
     std::vector<std::vector<uint32_t>> enumerate_initial(const AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_admissible(const AF & af, const IterableBitSet & active_arguments, bool preferred);
+    void enumerate_sequences_strong_admissible(const AF & af, const IterableBitSet & active_arguments, bool grounded);
     void enumerate_sequences_complete(const AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_stable(const AF & af, const IterableBitSet & active_arguments);
 };
