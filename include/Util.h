@@ -26,35 +26,61 @@ class IterableBitSet {
 
 };
 
-IterableBitSet get_reduct(IterableBitSet & active_arguments, const AF & af, const IterableBitSet & arguments) {
-    std::vector<uint32_t> reduct_array;
-    std::vector<uint8_t> reduct_bitset;
-    reduct_bitset.resize(af.args);
+#endif
 
-    for (uint32_t arg1 : active_arguments._array) {
-        bool is_reduced = false;
-        for (uint32_t arg2 : arguments._array) {
-            if (arg1 == arg2) {
-                is_reduced = true;
-                break;
-            }
-            for (uint32_t arg3 : af.attacked[arg2]) {
-                if (arg1 == arg3) {
-                    is_reduced = true;
-                    break;
-                }
-            }
-            if (is_reduced) {
-                break;
-            }
+/*
+AF getReduct(const AF & af, IterableBitSet & arguments) {
+	if (arguments._array.empty()) {
+		return af;
+	}
+	AF reduct = AF();
+
+	std::vector<uint32_t> reduced_arguments_arr;
+    std::vector<uint8_t> reduced_arguments_bit(af.args);
+	for (const uint32_t & arg: arguments._array) {
+        reduced_arguments_arr.push_back(arg);
+        reduced_arguments_bit[arg] = true;
+        for (const uint32_t & j : af.attacked[arg]) {
+            reduced_arguments_arr.push_back(j);
+            reduced_arguments_bit[j] = true;
         }
-        if (!is_reduced) {
-            reduct_array.push_back(arg1);
-            reduct_bitset[arg1] = true;
-        }
+	}
+	for (uint32_t i = 0; i < af.args; i++) {
+		if (!reduced_arguments_bit[i]) {
+			reduct.add_argument(af.int_to_arg[i]);
+		}
+	}
+
+	if (!reduct.args) {
+		return reduct;
+	}
+	
+	reduct.initialize_attackers();
+	reduct.initialize_vars();
+
+    for (uint32_t i = 0; i < af.args; i++) {
+        for()
     }
 
-    return IterableBitSet(reduct_array, reduct_bitset);
+	for (const auto& att : atts) {
+		uint32_t source;
+		uint32_t target;
+		auto it1 = af.arg_to_int.find(att.first);
+		if (it1 != af.arg_to_int.end()) {
+			source = it1->second;
+		} else {
+			continue;
+		}
+		auto it2 = af.arg_to_int.find(att.second);
+		if (it2 != af.arg_to_int.end()) {
+			target = it2->second;
+		} else {
+			continue;
+		}
+		if (removed_args.count(source) == 0 && removed_args.count(target) == 0) {
+			reduct.add_attack(att);
+		}
+	}
+	return reduct;
 }
-
-#endif
+*/

@@ -44,24 +44,26 @@ static int usage_flag = 0;
 static int formats_flag = 0;
 static int problems_flag = 0;
 
-void print_extension_ee(const std::vector<std::string> & extension) {
+void print_extension_ee(const AF & af, const std::vector<uint32_t> & extension) {
 	std::cout << "[";
 	for (uint32_t i = 0; i < extension.size(); i++) {
-		std::cout << extension[i];
+		std::cout << af.int_to_arg[extension[i]];
 		if (i != extension.size()-1) std::cout << ",";
 	}
-	std::cout << "]";
+	std::cout << "],";
 }
 
 task string_to_task(std::string problem) {
 	std::string tmp = problem.substr(0, problem.find("-"));
 	if (tmp == "ES") return ES;
+	if (tmp == "EE") return EE;
 	return UNKNOWN_TASK;
 }
 
 semantics string_to_sem(std::string problem) {
 	problem.erase(0, problem.find("-") + 1);
 	std::string tmp = problem.substr(0, problem.find("-"));
+	if (tmp == "IT") return IT;
 	if (tmp == "CO") return CO;
 	if (tmp == "ST") return ST;
 	if (tmp == "PR") return PR;
@@ -187,6 +189,8 @@ int main(int argc, char ** argv) {
 		return 1;
 	}
 
+	std::vector<uint32_t> active_array;
+	std::vector<u_int8_t> active_bitset;
 	AF aaf = AF();
 	aaf.sem = string_to_sem(task);
 	int32_t n_args = 0;
@@ -199,8 +203,11 @@ int main(int argc, char ** argv) {
 			if (line[0] == 'p') {
 				std::string p, af;
 				iss >> p >> af >> n_args;
+				active_bitset.resize(n_args, true);
+				active_array.reserve(n_args);
 				for (int i = 1; i <= n_args; i++) {
 					aaf.add_argument(std::to_string(i));
+					active_array.push_back(aaf.arg_to_int[std::to_string(i)]);
 				}
 				aaf.initialize_attackers();
 			} else {
@@ -215,7 +222,9 @@ int main(int argc, char ** argv) {
 				break;
 			}
 			aaf.add_argument(arg);
+			active_array.push_back(aaf.arg_to_int[arg]);
 		}
+		active_bitset.resize(aaf.args, true);
 		while (input >> source >> target) {
 			aaf.add_attack(make_pair(source, target));
 		}
@@ -227,16 +236,29 @@ int main(int argc, char ** argv) {
 
 	aaf.initialize_vars();
 
-	std::vector<std::string> acceptable_arguments;
+	IterableBitSet active_arguments = IterableBitSet(active_array, active_bitset);
+	std::vector<std::vector<uint32_t>> result;
 	switch (string_to_task(task)) {
 		case ES: // TODO what if st(F) = \emptyset
 			
+			break;
+		case EE:
+			switch (string_to_sem(task)) {
+			case IT:
+				result = Algorithms::enumerate_initial(aaf, active_arguments);
+				break;
+			
+			default:
+				break;
+			}
 			break;
 		default:
 			std::cerr << argv[0] << ": Problem not supported!\n";
 			return 1;
 	}
-	print_extension_ee(acceptable_arguments);
+	for (const std::vector<uint32_t> & ext : result) {
+		print_extension_ee(aaf, ext);
+	}
 	std::cout << "\n";
 
 	return 0;

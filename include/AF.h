@@ -7,8 +7,10 @@
 #include <string>
 #include <cstdint>     		// uncomment if boostlibs are not installed
 
-enum task { ES, UNKNOWN_TASK };
-enum semantics { CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
+#include "Util.h"
+
+enum task { ES, EE, UNKNOWN_TASK };
+enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
 
 /* The following hash_combine function is from the Boost software library
  * and is subject to the following licence.
@@ -88,7 +90,7 @@ void add_attack(std::pair<std::string,std::string> att);
 void initialize_attackers();
 void initialize_vars();
 
-AF get_reduct();
+IterableBitSet get_reduct(const IterableBitSet & active_arguments, const std::vector<uint32_t> & arguments);
 
 };
 

@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-CadicalSatSolver::CadicalSatSolver(int32_t n_vars, int32_t n_args) {
+CadicalSatSolver::CadicalSatSolver(int32_t n_args) {
     solver = new CaDiCaL::Solver;
 	decision_vars = n_args;
 	model = std::vector<bool>(decision_vars);

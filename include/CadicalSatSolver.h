@@ -15,7 +15,7 @@ private:
 	int32_t decision_vars;
 
 public:
-	CadicalSatSolver(int32_t n_vars, int32_t n_args);
+	CadicalSatSolver(int32_t n_args);
 	~CadicalSatSolver() { delete solver; };
 	void add_clause(const std::vector<int32_t> & clause);
 	void add_clause_1(int32_t lit);
