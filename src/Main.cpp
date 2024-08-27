@@ -183,7 +183,6 @@ int main(int argc, char ** argv) {
 	std::vector<uint32_t> active_array;
 	std::vector<u_int8_t> active_bitset;
 	AF aaf = AF();
-	aaf.sem = string_to_sem(task);
 	int32_t n_args = 0;
 	std::string line, arg, source, target;
 	if (fileformat == "i23") {

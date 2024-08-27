@@ -64,21 +64,14 @@ public:
 
 AF();
 
-semantics sem;
-
 uint32_t args;
 uint32_t count;
-uint32_t attacks;
 
 std::vector<std::string> int_to_arg;
 std::unordered_map<std::string,uint32_t> arg_to_int;
 
 std::vector<std::vector<uint32_t>> attackers;
 std::vector<std::vector<uint32_t>> attacked;
-std::vector<bool> unattacked;
-std::vector<uint8_t> self_attack;
-std::unordered_map<std::pair<uint32_t,uint32_t>,bool> att_exists;
-std::unordered_map<std::pair<uint32_t,uint32_t>,bool> symmetric_attack;
 
 std::vector<int> accepted_var;
 std::vector<int> rejected_var;

@@ -14,6 +14,11 @@ namespace Algorithms {
 
 namespace std {
     inline IterableBitSet get_reduct(const AF & af, const IterableBitSet & active_arguments, const std::vector<uint32_t> & arguments) {
+        /*
+        active_arguments - arguments
+        active_arguments - attackers[a] (for each a in arguments)
+        
+        */
         std::vector<uint32_t> reduct_array;
         std::vector<uint8_t> reduct_bitset;
         reduct_bitset.resize(af.args);
