@@ -250,6 +250,9 @@ int main(int argc, char ** argv) {
 				case ST:
 					Algorithms::enumerate_sequences_stable(aaf, active_arguments);
 					break;
+				case UC:
+					Algorithms::enumerate_sequences_unchallenged(aaf, active_arguments, true);
+					break;
 				default:
 					break;
 			}

@@ -9,6 +9,7 @@ namespace Algorithms {
     void enumerate_sequences_strong_admissible(const AF & af, const IterableBitSet & active_arguments, bool grounded);
     void enumerate_sequences_complete(const AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_stable(const AF & af, const IterableBitSet & active_arguments);
+    void enumerate_sequences_unchallenged(const AF & af, const IterableBitSet & active_arguments, bool maximal);
 };
 
 namespace std {
