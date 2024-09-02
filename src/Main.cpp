@@ -31,6 +31,7 @@
  */
 
 #include "Algorithms.h"		// Algorithms for all supported Problems
+#include "Parse.h"
 #include <getopt.h>			// parsing commandline options
 
 #include <iostream>			//std::cout
@@ -172,61 +173,9 @@ int main(int argc, char ** argv) {
 		//return 1;
 	}
 
-	std::ifstream input;
-	input.open(file);
-
-	if (!input.good()) {
-		std::cerr << argv[0] << ": Cannot open input file\n";
-		return 1;
-	}
-
-	std::vector<uint32_t> active_array;
-	std::vector<u_int8_t> active_bitset;
+	
 	AF aaf = AF();
-	int32_t n_args = 0;
-	std::string line, arg, source, target;
-	if (fileformat == "i23") {
-		while (!input.eof()) {
-			getline(input, line);
-			if (line.length() == 0 || line[0] == '#') continue;
-			std::istringstream iss(line);
-			if (line[0] == 'p') {
-				std::string p, af;
-				iss >> p >> af >> n_args;
-				active_bitset.resize(n_args, true);
-				active_array.reserve(n_args);
-				for (int i = 1; i <= n_args; i++) {
-					aaf.add_argument(std::to_string(i));
-					active_array.push_back(aaf.arg_to_int[std::to_string(i)]);
-				}
-				aaf.initialize_attackers();
-			} else {
-				iss >> source >> target;
-				aaf.add_attack(make_pair(source, target));
-			}
-		}
-	} else if (fileformat == "tgf") {
-		while (input >> arg) {
-			if (arg == "#") {
-				aaf.initialize_attackers();
-				break;
-			}
-			aaf.add_argument(arg);
-			active_array.push_back(aaf.arg_to_int[arg]);
-		}
-		active_bitset.resize(aaf.args, true);
-		while (input >> source >> target) {
-			aaf.add_attack(make_pair(source, target));
-		}
-	} else {
-		std::cerr << argv[0] << ": Unsupported file format\n";
-		return 1;
-	}
-	input.close();
-
-	aaf.initialize_vars();
-
-	IterableBitSet active_arguments = IterableBitSet(active_array, active_bitset);
+	IterableBitSet active_arguments = parse_i23(&aaf, file);
 	std::vector<std::vector<uint32_t>> result;
 	switch (string_to_task(task)) {
 		case ES: // TODO what if st(F) = \emptyset

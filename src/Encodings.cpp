@@ -1,7 +1,7 @@
 #include "Encodings.h"
 
 
-namespace Encodings {
+namespace Encodings { // TODO create active_arguments in encoding ?
 	void admissible_nonempty(const AF & af, const IterableBitSet & active_arguments, SAT_Solver & solver) {
 		std::vector<int32_t> non_empty_clause;
 		for (const uint32_t & arg : active_arguments._array) {
