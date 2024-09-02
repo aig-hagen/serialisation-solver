@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 namespace Algorithms {
-    void enumerate_sequences_stable(const AF & af, const IterableBitSet & active_arguments, std::vector<std::vector<uint32_t>> sequence) {
+    void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments, std::vector<std::vector<uint32_t>> sequence) {
         
         if (active_arguments._array.empty()) { // termination condition
             print_sequence(af, sequence);
@@ -21,7 +21,7 @@ namespace Algorithms {
         }
     }
 
-    void enumerate_sequences_stable(const AF & af, const IterableBitSet & active_arguments) {
+    void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments) {
         enumerate_sequences_stable(af, active_arguments, {});
     }
 }

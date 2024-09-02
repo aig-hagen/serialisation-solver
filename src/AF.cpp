@@ -19,5 +19,5 @@ int32_t AF::accepted_var(uint32_t arg) {
 }
 
 int32_t AF::rejected_var(uint32_t arg) {
-	return args + arg;
+	return (args + arg);
 }
