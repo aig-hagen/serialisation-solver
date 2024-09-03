@@ -84,7 +84,7 @@ void print_version(std::string solver_name) {
 }
 
 void print_formats() {
-	std::cout << "[tgf,i23]\n";
+	std::cout << "[i23]\n";
 }
 
 void print_problems() {
