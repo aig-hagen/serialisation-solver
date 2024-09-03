@@ -33,7 +33,7 @@ namespace std {
 	inline void print_extension(const AF & af, const std::vector<uint32_t> & extension) {
 		std::cout << "[";
 		for (size_t i = 0; i < extension.size(); i++) {
-			std::cout << extension[i];
+			std::cout << extension[i]+1;
 			if (i != extension.size()-1) std::cout << ",";
 		}
 		std::cout << "]";

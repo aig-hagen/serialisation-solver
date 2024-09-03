@@ -29,11 +29,11 @@ IterableBitSet parse_i23(AF* aaf, std::string file) {
             active_array.reserve(n_args);
             aaf->set_arguments(n_args);
             for (int i = 1; i <= n_args; i++) {
-                active_array.push_back(i);
+                active_array.push_back(i-1);
             }
         } else {
             iss >> source >> target;
-            aaf->add_attack(source, target);
+            aaf->add_attack(source-1, target-1);
         }
     }
     input.close();
