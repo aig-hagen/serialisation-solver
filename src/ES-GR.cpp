@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 namespace Algorithms {
-    void enumerate_sequences_strong_admissible(const AF & af, const IterableBitSet & active_arguments, bool grounded, std::vector<std::vector<uint32_t>> sequence) {
+    void enumerate_sequences_strong_admissible(AF & af, const IterableBitSet & active_arguments, bool grounded, std::vector<std::vector<uint32_t>> sequence) {
         bool is_maximal = true;
         for (const uint32_t & arg : active_arguments._array) {
             bool unattacked = true;
@@ -34,7 +34,7 @@ namespace Algorithms {
         }
     }
 
-    void enumerate_sequences_strong_admissible(const AF & af, const IterableBitSet & active_arguments, bool grounded) {
+    void enumerate_sequences_strong_admissible(AF & af, const IterableBitSet & active_arguments, bool grounded) {
         enumerate_sequences_strong_admissible(af, active_arguments, grounded, {});
     }
 }

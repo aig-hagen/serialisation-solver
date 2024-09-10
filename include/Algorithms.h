@@ -4,12 +4,12 @@
 #include "Encodings.h"
 
 namespace Algorithms {
-    std::vector<std::vector<uint32_t>> enumerate_initial(const AF & af, const IterableBitSet & active_arguments);
-    void enumerate_sequences_admissible(const AF & af, const IterableBitSet & active_arguments, bool preferred);
-    void enumerate_sequences_strong_admissible(const AF & af, const IterableBitSet & active_arguments, bool grounded);
-    void enumerate_sequences_complete(const AF & af, const IterableBitSet & active_arguments);
-    void enumerate_sequences_stable(const AF & af, const IterableBitSet & active_arguments);
-    void enumerate_sequences_unchallenged(const AF & af, const IterableBitSet & active_arguments, bool maximal);
+    std::vector<std::vector<uint32_t>> enumerate_initial(AF & af, const IterableBitSet & active_arguments);
+    void enumerate_sequences_admissible(AF & af, const IterableBitSet & active_arguments, bool preferred);
+    void enumerate_sequences_strong_admissible(AF & af, const IterableBitSet & active_arguments, bool grounded);
+    void enumerate_sequences_complete(AF & af, const IterableBitSet & active_arguments);
+    void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments);
+    void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal);
 };
 
 namespace std {

@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 namespace Algorithms {
-    void enumerate_sequences_unchallenged(const AF & af, const IterableBitSet & active_arguments, bool maximal, std::vector<std::vector<uint32_t>> sequence) {
+    void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal, std::vector<std::vector<uint32_t>> sequence) {
         bool is_maximal = true;
         std::vector<std::vector<uint32_t>> initial_sets = enumerate_initial(af, active_arguments);
         for (const std::vector<uint32_t> & set : initial_sets) {
@@ -41,7 +41,7 @@ namespace Algorithms {
         }
     }
 
-    void enumerate_sequences_unchallenged(const AF & af, const IterableBitSet & active_arguments, bool maximal) {
+    void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal) {
         enumerate_sequences_unchallenged(af, active_arguments, maximal, {});
     }
 }

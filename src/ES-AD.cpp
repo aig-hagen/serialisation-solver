@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 namespace Algorithms {
-    void enumerate_sequences_admissible(const AF & af, const IterableBitSet & active_arguments, bool preferred, std::vector<std::vector<uint32_t>> sequence) {
+    void enumerate_sequences_admissible(AF & af, const IterableBitSet & active_arguments, bool preferred, std::vector<std::vector<uint32_t>> sequence) {
         bool is_maximal = true;
         std::vector<std::vector<uint32_t>> initial_sets = enumerate_initial(af, active_arguments);
         for (const std::vector<uint32_t> & set : initial_sets) {
@@ -21,7 +21,7 @@ namespace Algorithms {
         }
     }
 
-    void enumerate_sequences_admissible(const AF & af, const IterableBitSet & active_arguments, bool preferred) {
+    void enumerate_sequences_admissible(AF & af, const IterableBitSet & active_arguments, bool preferred) {
         enumerate_sequences_admissible(af, active_arguments, preferred, {});
     }
 }

@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 namespace Algorithms {
-    void enumerate_sequences_complete(const AF & af, const IterableBitSet & active_arguments, std::vector<std::vector<uint32_t>> sequence) {
+    void enumerate_sequences_complete(AF & af, const IterableBitSet & active_arguments, std::vector<std::vector<uint32_t>> sequence) {
         bool has_unattacked_initialset = false;
         std::vector<std::vector<uint32_t>> initial_sets = enumerate_initial(af, active_arguments);
         for (const std::vector<uint32_t> & set : initial_sets) {
@@ -30,7 +30,7 @@ namespace Algorithms {
         }
     }
 
-    void enumerate_sequences_complete(const AF & af, const IterableBitSet & active_arguments) {
+    void enumerate_sequences_complete(AF & af, const IterableBitSet & active_arguments) {
         enumerate_sequences_complete(af, active_arguments, {});
     }
 }

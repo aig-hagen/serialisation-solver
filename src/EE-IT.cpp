@@ -2,7 +2,7 @@
 
 
 namespace Algorithms {
-    std::vector<std::vector<uint32_t>> enumerate_initial(const AF & af, const IterableBitSet & active_arguments) {
+    std::vector<std::vector<uint32_t>> enumerate_initial(AF & af, const IterableBitSet & active_arguments) {
         if (active_arguments._array.empty()) {
             return {};
         }
@@ -27,9 +27,9 @@ namespace Algorithms {
                 minimization_clause.clear();
                 for (const uint32_t arg : active_arguments._array) {
                     if (solver.model[arg]) {
-                        minimization_clause.push_back(-af.accepted_var[arg]);
+                        minimization_clause.push_back(-af.accepted_var(arg));
                     } else {
-                        solver.assume(-af.accepted_var[arg]);
+                        solver.assume(-af.accepted_var(arg));
                     }
                 }
                 //if (minimization_clause.size() == 1) {
@@ -43,7 +43,7 @@ namespace Algorithms {
                 for(const uint32_t & arg : active_arguments._array) {
                     if (solver.model[arg]) {
                         extension.push_back(arg);
-                        complement_clause.push_back(-af.accepted_var[arg]);
+                        complement_clause.push_back(-af.accepted_var(arg));
                     }
                 }
                 result.push_back(extension);
