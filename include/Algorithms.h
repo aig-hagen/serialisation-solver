@@ -10,6 +10,7 @@ namespace Algorithms {
     void enumerate_sequences_complete(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal);
+    void minimal_sequences_argument(AF & af, const IterableBitSet & active_arguments, uint32_t argument);
 };
 
 namespace std {

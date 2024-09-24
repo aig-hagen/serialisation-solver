@@ -49,11 +49,11 @@ static int problems_flag = 0;
  * Tasks:
  * ES :	Enumerate Serialisation Sequences
  * EE : Enumerate Extensions
- * SA : Sequences for Argument
+ * AS : Sequences for Argument
  * SE : Sequences for Extension
  * MA : Minimal Sequences for Argument
  */
-enum task { ES, EE, UNKNOWN_TASK };
+enum task { ES, EE, AS, SE, MA, UNKNOWN_TASK };
 enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
 
 
@@ -61,6 +61,9 @@ task string_to_task(std::string problem) {
 	std::string tmp = problem.substr(0, problem.find("-"));
 	if (tmp == "ES") return ES;
 	if (tmp == "EE") return EE;
+	if (tmp == "AS") return AS;
+	if (tmp == "SE") return SE;
+	if (tmp == "MA") return MA;
 	return UNKNOWN_TASK;
 }
 
