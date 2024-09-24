@@ -8,9 +8,6 @@
 #include <string>
 #include <cstdint>     		// uncomment if boostlibs are not installed
 
-enum task { ES, EE, UNKNOWN_TASK };
-enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
-
 class AF {
 public:
 
