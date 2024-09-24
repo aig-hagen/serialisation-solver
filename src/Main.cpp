@@ -92,7 +92,7 @@ void print_usage(std::string solver_name) {
 }
 
 void print_version(std::string solver_name) {
-	std::cout << solver_name << " (version 1.0)\n" << "TODO\n";
+	std::cout << solver_name << " (version 1.2)\n" << "Lars Bengel <lars.bengel@fernuni-hagen.de>\n";
 }
 
 void print_formats() {
