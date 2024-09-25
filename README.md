@@ -1,8 +1,8 @@
-# serialisation-solver v1.0 (08-2024)
+# serialisation-solver v1.2 (09-2024)
 
 Implements algorithms for computing serialisation sequences for argumentation frameworks.
 
-Supports TGF and i23 format for abstract argumentation frameworks.
+Supports i23 format for abstract argumentation frameworks.
 
 
 ## Installation
