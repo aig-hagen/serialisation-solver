@@ -51,6 +51,7 @@ void print_usage(std::string solver_name) {
 	std::cout << "  <task>      computational problem; for a list of available problems use option --problems\n";
 	std::cout << "  <file>      input argumentation framework\n";
 	std::cout << "  <format>    file format for input AF; for a list of available formats use option --formats\n";
+	std::cout << " <query>		query argument or extension\n";
 	std::cout << "Options:\n";
 	std::cout << "  --help      Displays this help message.\n";
 	std::cout << "  --version   Prints version and author information.\n";
@@ -59,7 +60,7 @@ void print_usage(std::string solver_name) {
 }
 
 void print_version(std::string solver_name) {
-	std::cout << solver_name << " (version 1.2)\n" << "Lars Bengel <lars.bengel@fernuni-hagen.de>\n";
+	std::cout << solver_name << " (version 1.2)\n" << "Lars Bengel, University of Hagen <lars.bengel@fernuni-hagen.de>\n";
 }
 
 void print_formats() {
@@ -87,13 +88,13 @@ int main(int argc, char ** argv) {
 		{"p", required_argument, 0, 'p'},
 		{"f", required_argument, 0, 'f'},
 		{"fo", required_argument, 0, 'o'},
-		{"s", required_argument, 0, 's'},
+		{"a", required_argument, 0, 'a'},
 		{0, 0, 0, 0}
 	};
 
 	int option_index = 0;
 	int opt = 0;
-	std::string task, file, fileformat, query, sat_path;
+	std::string task, file, fileformat, query;
 
 	while ((opt = getopt_long_only(argc, argv, "", longopts, &option_index)) != -1) {
 		switch (opt) {
@@ -108,8 +109,8 @@ int main(int argc, char ** argv) {
 			case 'o':
 				fileformat = optarg;
 				break;
-			case 's':
-				sat_path = optarg;
+			case 'a':
+				query = optarg;
 				break;
 			default:
 				return 1;
@@ -151,7 +152,6 @@ int main(int argc, char ** argv) {
 		fileformat = "i23";
 		//return 1;
 	}
-
 	
 	AF aaf = AF();
 	IterableBitSet active_arguments = parse_i23(&aaf, file);
@@ -181,23 +181,43 @@ int main(int argc, char ** argv) {
 					Algorithms::enumerate_sequences_unchallenged(aaf, active_arguments, true);
 					break;
 				default:
-					break;
+					std::cerr << argv[0] << ": Semantics not supported!\n";
+					return 1;
 			}
 			break;
 		case EE:
 			switch (string_to_sem(task)) {
-			case IT:
-				result = Algorithms::enumerate_initial(aaf, active_arguments);
-				for (const std::vector<uint32_t> & ext : result) {
-					print_extension(aaf, ext);
-					std::cout << ",";
-				}
-				break;
+				case IT:
+					result = Algorithms::enumerate_initial(aaf, active_arguments);
+					for (const std::vector<uint32_t> & ext : result) {
+						print_extension(aaf, ext);
+						std::cout << ",";
+					}
+					break;
 			
-			default:
-				break;
+				default:
+					std::cerr << argv[0] << ": Semantics not supported!\n";
+					return 1;
 			}
 			break;
+		case AS: {
+			uint32_t query_argument;
+			if (query.empty()) {
+				std::cerr << argv[0] << ": Query argument must be specified via -a flag\n";
+				return 1;
+			} else {
+				query_argument = std::stoi(query) - 1;
+			}
+			switch (string_to_sem(task)) {
+				case AD:
+					Algorithms::sequences_argument_admissible(aaf, active_arguments, query_argument);
+					break;
+				default:
+					std::cerr << argv[0] << ": Semantics not supported!\n";
+			return 1;
+			}
+			break;
+		}
 		default:
 			std::cerr << argv[0] << ": Problem not supported!\n";
 			return 1;

@@ -3,6 +3,8 @@
 
 #include "Encodings.h"
 
+#include <stack>
+
 namespace Algorithms {
     std::vector<std::vector<uint32_t>> enumerate_initial(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_admissible(AF & af, const IterableBitSet & active_arguments, bool preferred);
@@ -10,7 +12,7 @@ namespace Algorithms {
     void enumerate_sequences_complete(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal);
-    void minimal_sequences_argument(AF & af, const IterableBitSet & active_arguments, uint32_t argument);
+    void sequences_argument_admissible(AF & af, const IterableBitSet & active_arguments, uint32_t argument);
 };
 
 namespace std {
@@ -37,6 +39,36 @@ namespace std {
         }
 
         return IterableBitSet(reduct_array, reduct_bitset);
+    }
+
+    inline IterableBitSet get_cone(const AF & af, const IterableBitSet & active_arguments, uint32_t argument) {
+        if (!active_arguments._bitset[argument]) {
+            std::cerr << "Argument is not part of the framework!\n";
+			exit(1);
+        }
+        std::vector<uint8_t> cone_bitset(af.args, false);
+        std::vector<uint32_t> cone_array;
+        cone_array.reserve(active_arguments._array.size());
+
+		std::stack<uint32_t> stack;
+		stack.push(argument);
+		uint32_t arg;
+
+		while (!stack.empty()) {
+			arg = stack.top();
+			stack.pop();
+			if(!cone_bitset[arg]) {
+				cone_bitset[arg] = true;
+                cone_array.push_back(arg);
+			}
+			for (uint32_t i = 0; i < af.attackers[arg].size(); i++) {
+				if (!cone_bitset[af.attackers[arg][i]] && active_arguments._bitset[af.attackers[arg][i]]) {
+					stack.push(af.attackers[arg][i]);
+				}
+			}
+		}
+
+		return IterableBitSet(cone_array, cone_bitset);
     }
 }
 
