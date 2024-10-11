@@ -33,6 +33,18 @@ namespace std {
 		std::cout << "]";
   	}
 
+	inline void print_extension(const AF & af, const std::unordered_set<uint32_t> & extension) {
+		bool first = true;
+		std::cout << "[";
+		for (uint32_t arg : extension) {
+			if (first) {
+				first = false;
+			} else std::cout << ",";
+			std::cout << arg+1;
+		}
+		std::cout << "]";
+  	}
+
   	inline void print_sequence(const AF & af, std::vector<std::vector<uint32_t>> sequence) {
 		std::cout << "(";
 		for (size_t i = 0; i < sequence.size(); i++) {
