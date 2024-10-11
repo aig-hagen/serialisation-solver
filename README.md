@@ -1,3 +1,6 @@
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/aig-hagen/serialisation-solver?include_prereleases)
+[![License: GPL3.0](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL3)
+
 # serialisation-solver v1.2 (09-2024)
 
 Implements algorithms for computing serialisation sequences for argumentation frameworks.
