@@ -1,0 +1,15 @@
+Initial Sets in the reduct:
+Let F be an AF and S \in is(F).
+Then, consider the reduct F^S:
+For every initial set S' \in is(F):
+    (1) If S' == S, then S' \notin is(F^S)
+    (2) If S' \cap S^+_F \neq \emptyset, then S' \notin is(F^S) (altough a subset of S' might be initial)
+    (3) If S'^-_F \cap S^+_F \neq \emptyset, then S' MIGHT not be in is(F^S)
+    (4) Otherwise, S' \in is(F^S)
+    (5) If |S'|=1 and not (2), then S' \in is(F^S)
+    - Generally:
+        - an uc initial set may become challenged
+        - for case (3):
+            - S' will still be admissible, just not necessarily initial
+            - if |S'|=1, then it will still be initial
+
