@@ -16,8 +16,10 @@ namespace Algorithms {
         }
 
         if (!preferred || is_maximal) { // termination condition
+            #ifndef D_LOG
             print_sequence(af, sequence);
             std::cout << ",";
+            #endif
         }
     }
 

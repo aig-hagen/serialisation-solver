@@ -47,7 +47,8 @@ ifeq ($(SOLVER), cadical)
 endif
 
 # debug
-CXXFLAGS	+= -g3
+#CXXFLAGS	+= -g3
+#CPPFLAGS 	+= -D D_LOG
 
 OUTPUT_DIR	:= ./build/bin
 

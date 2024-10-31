@@ -4,6 +4,10 @@
 namespace Algorithms {
     /* Enumerates initial sets of the argumentation framework */
     std::vector<std::vector<uint32_t>> enumerate_initial(AF & af, const IterableBitSet & active_arguments, std::vector<std::vector<uint32_t>> initial_sets) {
+        #ifdef D_LOG
+        int num_initial=initial_sets.size();
+        int num_discarded=0,num_singleton_kept=0,num_poss_affected=0,num_unaffected=0,num_satcalls=0,num_initial_new=0;
+        #endif
         if (active_arguments._array.empty()) {
             return {};
         }
@@ -25,8 +29,14 @@ namespace Algorithms {
                 }
             }
             if (!exists_in_reduct) {
+                #ifdef D_LOG
+                num_discarded++;
+                #endif
                 // Set is not (fully) in the reduct -> can be ignored for now
             } else if (set.size() == 1) {
+                #ifdef D_LOG
+                num_singleton_kept++;
+                #endif
                 // Singleton set, not attacked -> add to result and add complement clause
                 result.push_back(set);
                 solver.add_clause_1(-af.accepted_var(set[0]));
@@ -44,6 +54,9 @@ namespace Algorithms {
                     if (attacker_removed) break;
                 }
                 if (attacker_removed) {
+                    #ifdef D_LOG
+                    num_poss_affected++;
+                    #endif
                     // initial set status may have been affected -> add clause and check once via assumptions. If NO -> still initial, otherwise iteratively minimise
                     bool found_subset_extension = false;
                     while (true) { // Iteratively minimize the found model
@@ -61,6 +74,9 @@ namespace Algorithms {
                         solver.add_clause(minimization_clause);
 
                         int sat = solver.solve();
+                        #ifdef D_LOG
+                        num_satcalls++;
+                        #endif
                         if (sat == UNSAT_V) break;
                         found_subset_extension = true;
                     }
@@ -79,6 +95,9 @@ namespace Algorithms {
                         result.push_back(set);
                     }
                 } else {
+                    #ifdef D_LOG
+                    num_unaffected++;
+                    #endif
                     // not affected -> still initial, add to result and add complement clause
                     result.push_back(set);
                     minimization_clause.clear();
@@ -95,6 +114,9 @@ namespace Algorithms {
             bool found_extension = false;
             while (true) { // Iteratively minimize the found model
                 int sat = solver.solve();
+                #ifdef D_LOG
+                num_satcalls++;
+                #endif
                 if (sat == UNSAT_V) break;
 
                 // add clause that ensures at least one accepted argument of the found model must not be accepted
@@ -124,6 +146,10 @@ namespace Algorithms {
                 break;
             }
         }
+        #ifdef D_LOG
+        num_initial_new=result.size();
+        std::cout << num_initial << "," << num_discarded << "," << num_singleton_kept << "," << num_poss_affected << "," << num_unaffected << "," << num_satcalls << "," << num_initial_new << std::endl;
+        #endif
         return result;
     }
 
