@@ -188,7 +188,7 @@ int main(int argc, char ** argv) {
 		case EE:
 			switch (string_to_sem(task)) {
 				case IT:
-					result = Algorithms::enumerate_initial(aaf, active_arguments);
+					result = Algorithms::enumerate_initial(aaf, active_arguments, {});
 					for (const std::vector<uint32_t> & ext : result) {
 						print_extension(aaf, ext);
 						std::cout << ",";

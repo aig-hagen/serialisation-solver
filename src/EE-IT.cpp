@@ -31,11 +31,12 @@ namespace Algorithms {
                 result.push_back(set);
                 solver.add_clause_1(-af.accepted_var(set[0]));
             } else {
-                // Verify whether initial set status may be affected TODO not complete: have to check full cone of influence for change: if S is upstream of S', then status MAY have changed
+                // Verify whether initial set status may be affected
                 bool attacker_removed = false;
                 for (uint32_t a : set) {
+                    solver.model[a] = true;
                     for (uint32_t b : af.attackers[a]) {
-                        if (!active_arguments._bitset[b]) { // TODO this does not work: only attackers removed in the last step have to be checked
+                        if (!active_arguments._bitset[b]) { // TODO this could be more precise if we only check attackers removed in the previous step (instead of all previous steps)
                             attacker_removed = true;
                             break;
                         }
@@ -43,8 +44,40 @@ namespace Algorithms {
                     if (attacker_removed) break;
                 }
                 if (attacker_removed) {
-                    // MIGHT not be initial anymore -> only a subset may TODO add this somehow
-                    // IDEA: add complement clause and assumptions and solve: if NO -> S' is initial, if YES -> initial subset needs to be found
+                    // initial set status may have been affected -> add clause and check once via assumptions. If NO -> still initial, otherwise iteratively minimise
+                    bool found_subset_extension = false;
+                    while (true) { // Iteratively minimize the found model
+                        // add clause that ensures at least one accepted argument of the found model must not be accepted
+                        // ensure that no new argument may be accepted via temporary assumptions
+                        minimization_clause.clear();
+                        minimization_clause.reserve(active_arguments._array.size());
+                        for (const uint32_t arg : active_arguments._array) {
+                            if (solver.model[arg]) {
+                                minimization_clause.push_back(-af.accepted_var(arg));
+                            } else {
+                                solver.assume(-af.accepted_var(arg));
+                            }
+                        }
+                        solver.add_clause(minimization_clause);
+
+                        int sat = solver.solve();
+                        if (sat == UNSAT_V) break;
+                        found_subset_extension = true;
+                    }
+                    if (found_subset_extension) {
+                        // the found subset is initial instead TODO could there be multiple subsets that are now initial? does that matter?
+                        extension.clear();
+                        extension.reserve(active_arguments._array.size());
+                        for(const uint32_t & arg : active_arguments._array) {
+                            if (solver.model[arg]) {
+                                extension.push_back(arg);
+                            }
+                        }
+                        result.push_back(extension);
+                    } else {
+                        // still an initial set in the reduct
+                        result.push_back(set);
+                    }
                 } else {
                     // not affected -> still initial, add to result and add complement clause
                     result.push_back(set);
@@ -56,10 +89,9 @@ namespace Algorithms {
                     solver.add_clause(minimization_clause);
                 }
             }
-
         }
         
-        while (true) { // iteratively compute models for the encoding
+        while (true) { // iteratively compute remaining models for the encoding
             bool found_extension = false;
             while (true) { // Iteratively minimize the found model
                 int sat = solver.solve();
@@ -93,5 +125,9 @@ namespace Algorithms {
             }
         }
         return result;
+    }
+
+    std::vector<std::vector<uint32_t>> enumerate_initial(AF & af, const IterableBitSet & active_arguments) {
+        return {};
     }
 }
