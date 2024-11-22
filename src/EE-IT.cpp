@@ -43,8 +43,11 @@ namespace Algorithms {
             } else {
                 // Verify whether initial set status may be affected
                 bool attacker_removed = false;
+                solver.model.resize(0);solver.model.resize(af.args, 0);
                 for (uint32_t a : set) {
                     solver.model[a] = true;
+                }
+                for (uint32_t a : set) {
                     for (uint32_t b : af.attackers[a]) {
                         if (!active_arguments._bitset[b]) { // TODO this could be more precise if we only check attackers removed in the previous step (instead of all previous steps)
                             attacker_removed = true;

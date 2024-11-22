@@ -40,7 +40,7 @@ CPPFLAGS	:= $(INC_FLAGS) -MMD -MP
 ##################################################################################################
 ###### CUSTOM ####################################################################################
 ##################################################################################################
-CPPFLAGS	+= -Wall -Wno-parentheses -Wno-sign-compare -std=c++20
+CPPFLAGS	+= -Wall -Wno-parentheses -Wno-sign-compare -std=c++20 -O3
 
 ifeq ($(SOLVER), cadical)
 	LDFLAGS		+= $(CADICAL_DIR)/build/libcadical.a
