@@ -32,7 +32,7 @@ namespace Algorithms {
                 #ifdef D_LOG
                 num_discarded++;
                 #endif
-                // Set is not (fully) in the reduct -> can be ignored for now
+                // Set is not (fully) in the reduct -> can be ignored for now TODO could add a subset-clause for the arguments that remained in the reduct
             } else if (set.size() == 1) {
                 #ifdef D_LOG
                 num_singleton_kept++;
