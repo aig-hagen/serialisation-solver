@@ -1,0 +1,77 @@
+{
+    "extension": [
+        6,
+        10,
+        4,
+        2,
+        8
+    ],
+    "steps": [
+        {
+            "arguments": [
+                8
+            ],
+            "defeats": [
+                {
+                    "necessary": false,
+                    "source": 8,
+                    "target": 7
+                }
+            ],
+            "id": 1,
+            "unattacked": true
+        },
+        {
+            "arguments": [
+                4,
+                10
+            ],
+            "defeats": [
+                {
+                    "necessary": false,
+                    "source": 4,
+                    "target": 3
+                },
+                {
+                    "necessary": true,
+                    "source": 10,
+                    "target": 5
+                },
+                {
+                    "necessary": true,
+                    "source": 4,
+                    "target": 9
+                }
+            ],
+            "id": 2,
+            "unattacked": false
+        },
+        {
+            "arguments": [
+                2
+            ],
+            "defeats": [],
+            "id": 3,
+            "unattacked": true
+        },
+        {
+            "arguments": [
+                6
+            ],
+            "defeats": [
+                {
+                    "necessary": false,
+                    "source": 6,
+                    "target": 7
+                },
+                {
+                    "necessary": true,
+                    "source": 6,
+                    "target": 1
+                }
+            ],
+            "id": 4,
+            "unattacked": false
+        }
+    ]
+}

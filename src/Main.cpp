@@ -162,7 +162,6 @@ int main(int argc, char ** argv) {
 		case EX:
 			switch (string_to_sem(task)) {
 				case AD:
-					std::cout << "Computing" << std::endl;
 					result = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
 					for (std::vector<std::vector<uint32_t>> seq : result) {
 						Algorithms::explain_extension(aaf, active_arguments, arguments, seq);
