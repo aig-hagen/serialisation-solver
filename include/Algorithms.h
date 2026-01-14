@@ -13,6 +13,11 @@ namespace Algorithms {
     void enumerate_sequences_stable(AF & af, const IterableBitSet & active_arguments);
     void enumerate_sequences_unchallenged(AF & af, const IterableBitSet & active_arguments, bool maximal);
     void sequences_argument_admissible(AF & af, const IterableBitSet & active_arguments, uint32_t argument);
+
+    // for explanations
+    std::vector<std::vector<uint32_t>> enumerate_initial_subsets(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
+    std::vector<std::vector<std::vector<uint32_t>>> enumerate_sequences_admissible_for_set(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
+    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence);
 };
 
 namespace std {

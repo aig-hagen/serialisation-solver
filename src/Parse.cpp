@@ -40,3 +40,34 @@ IterableBitSet parse_i23(AF* aaf, std::string file) {
 
     return IterableBitSet(active_array, active_bitset);
 }
+
+IterableBitSet parse_extension(uint32_t n_args, std::string extension) {
+	std::vector<uint32_t> active_array;
+	std::vector<uint8_t> active_bitset;
+	size_t start = extension.find_first_of('{');
+    size_t end = extension.find_last_of('}');
+    if (start == std::string::npos || end == std::string::npos || start >= end) {
+        std::cerr << extension << ": Extension not well-formed!\n";
+        exit(0);
+    }
+
+    std::stringstream ss(extension.substr(start + 1, end - start - 1));
+    std::string item;
+    uint32_t arg;
+
+    active_array.reserve(n_args);
+    active_bitset.resize(n_args,false);
+    while (std::getline(ss, item, ',')) {
+        if (!item.empty()) { // skip empty strings
+            try {
+                arg = std::stoi(item)-1;
+                active_array.push_back(arg);
+                active_bitset[arg] = true;
+            } catch (...) {
+                // handle conversion error if needed
+            }
+        }
+    }
+
+    return IterableBitSet(active_array, active_bitset);
+}

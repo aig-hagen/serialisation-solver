@@ -1,5 +1,7 @@
 #include "Explanation.h"
 
+#ifdef EXPLAIN
+
 namespace Explanations {
     void get_explanation_for_set(const AF & af, const std::vector<uint32_t> arguments) {
         for (const uint32_t a1 : arguments) {
@@ -43,3 +45,5 @@ namespace Explanations {
         std::cout << "The argument" << a1 << "is attacked by the argument" << a2 << ", but it is not defended. ";
     }
 }
+
+#endif

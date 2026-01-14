@@ -17,12 +17,13 @@ static int problems_flag = 0;
  * SE : Sequences for Extension
  * MA : Minimal Sequences for Argument
  */
-enum task { ES, EE, AS, SE, MA, UNKNOWN_TASK };
+enum task { EX, ES, EE, AS, SE, MA, UNKNOWN_TASK };
 enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
 
 
 task string_to_task(std::string problem) {
 	std::string tmp = problem.substr(0, problem.find("-"));
+	if (tmp == "EX") return EX;
 	if (tmp == "ES") return ES;
 	if (tmp == "EE") return EE;
 	if (tmp == "AS") return AS;
@@ -155,69 +156,25 @@ int main(int argc, char ** argv) {
 	
 	AF aaf = AF();
 	IterableBitSet active_arguments = parse_i23(&aaf, file);
-	std::vector<std::vector<uint32_t>> result;
+    IterableBitSet arguments = parse_extension(aaf.args, query);
+	std::vector<std::vector<std::vector<uint32_t>>> result;
 	switch (string_to_task(task)) {
-		case ES: // TODO what if st(F) = \emptyset
+		case EX:
 			switch (string_to_sem(task)) {
 				case AD:
-					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, false);
-					break;
-				case PR:
-					Algorithms::enumerate_sequences_admissible(aaf, active_arguments, true);
-					break;
-				case SA:
-					Algorithms::enumerate_sequences_strong_admissible(aaf, active_arguments, false);
-					break;
-				case GR:
-					Algorithms::enumerate_sequences_strong_admissible(aaf, active_arguments, true);
-					break;
-				case CO:
-					Algorithms::enumerate_sequences_complete(aaf, active_arguments);
-					break;
-				case ST:
-					Algorithms::enumerate_sequences_stable(aaf, active_arguments);
-					break;
-				case UC:
-					Algorithms::enumerate_sequences_unchallenged(aaf, active_arguments, true);
-					break;
-				default:
-					std::cerr << argv[0] << ": Semantics not supported!\n";
-					return 1;
-			}
-			break;
-		case EE:
-			switch (string_to_sem(task)) {
-				case IT:
-					result = Algorithms::enumerate_initial(aaf, active_arguments);
-					for (const std::vector<uint32_t> & ext : result) {
-						print_extension(aaf, ext);
-						std::cout << ",";
+					std::cout << "Computing" << std::endl;
+					result = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
+					for (std::vector<std::vector<uint32_t>> seq : result) {
+						Algorithms::explain_extension(aaf, active_arguments, arguments, seq);
+						break;
 					}
+
 					break;
-			
 				default:
 					std::cerr << argv[0] << ": Semantics not supported!\n";
 					return 1;
 			}
 			break;
-		case AS: {
-			uint32_t query_argument;
-			if (query.empty()) {
-				std::cerr << argv[0] << ": Query argument must be specified via -a flag\n";
-				return 1;
-			} else {
-				query_argument = std::stoi(query) - 1;
-			}
-			switch (string_to_sem(task)) {
-				case AD:
-					Algorithms::sequences_argument_admissible(aaf, active_arguments, query_argument);
-					break;
-				default:
-					std::cerr << argv[0] << ": Semantics not supported!\n";
-			return 1;
-			}
-			break;
-		}
 		default:
 			std::cerr << argv[0] << ": Problem not supported!\n";
 			return 1;

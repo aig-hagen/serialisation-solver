@@ -10,8 +10,6 @@ namespace Algorithms {
 
         std::vector<std::vector<uint32_t>> result;
         std::vector<uint32_t> extension;
-        //std::vector<int32_t> complement_clause;
-        //complement_clause.reserve(active_arguments._array.size());
         std::vector<int32_t> minimization_clause;
         minimization_clause.reserve(active_arguments._array.size());
 
@@ -43,16 +41,12 @@ namespace Algorithms {
             if (found_extension) { // if an extension has been found and minimized, add corresponding extension to result and add a complement clause to ensure it is not found again
                 extension.clear();
                 extension.reserve(active_arguments._array.size());
-                //complement_clause.clear();
-                //complement_clause.reserve(active_arguments._array.size());
                 for(const uint32_t & arg : active_arguments._array) {
                     if (solver.model[arg]) {
                         extension.push_back(arg);
-                        //complement_clause.push_back(-af.accepted_var(arg)); // TODO is this even needed ?
                     }
                 }
                 result.push_back(extension);
-                //solver.add_clause(complement_clause);
             } else {
                 break;
             }
