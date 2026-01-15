@@ -31,12 +31,12 @@ namespace Algorithms {
             }
             
             for (uint32_t attacker : attackers_total) {
-                for(uint32_t arg : af.attackers[attacker]) {
-                    if (!reduct._bitset[arg]) {continue;}
-                    for (uint32_t a : set) {
-                        if (arg==a) {
+                for (uint32_t a : set) {
+                    for (uint32_t arg: af.attacked[a]) {
+                        if (!reduct._bitset[arg]) continue;
+                        if (arg==attacker) {
                             json defeat;
-                            defeat["source"] = arg+1;
+                            defeat["source"] = a+1;
                             defeat["target"] = attacker+1;
                             defeat["necessary"] = attackers_set.count(attacker)>0;
                             defeats.push_back(defeat);
