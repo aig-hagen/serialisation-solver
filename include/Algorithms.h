@@ -6,6 +6,8 @@
 #include <stack>
 
 namespace Algorithms {
+    // for EE
+    void enumerate_extensions_admissible(AF & af, const IterableBitSet & active_arguments);
     // for ES
     /** Enumerates all initial sets in the given AF.
      * @param af                The argumentation framework.

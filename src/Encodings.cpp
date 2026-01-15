@@ -22,4 +22,8 @@ namespace Encodings {
 		}
 		solver.add_clause(non_empty_clause);
 	}
+
+	void complete(AF & af, const IterableBitSet & active_arguments, SAT_Solver & solver) {
+		// TODO
+	}
 }

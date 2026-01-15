@@ -165,11 +165,13 @@ int main(int argc, char ** argv) {
 			arguments = parse_extension(aaf.args, query);
 			switch (string_to_sem(task)) {
 				case AD:
-					
 					sequences = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
 					for (std::vector<std::vector<uint32_t>> seq : sequences) {
 						Algorithms::explain_extension(aaf, active_arguments, arguments, seq);
 						break;
+					}
+					if (sequences.empty()) {
+						std::cout << "NO\n";
 					}
 					break;
 				default:
@@ -214,7 +216,9 @@ int main(int argc, char ** argv) {
 						std::cout << ",";
 					}
 					break;
-			
+				case AD:
+					Algorithms::enumerate_extensions_admissible(aaf, active_arguments);
+					break;
 				default:
 					std::cerr << argv[0] << ": Semantics not supported!\n";
 					return 1;

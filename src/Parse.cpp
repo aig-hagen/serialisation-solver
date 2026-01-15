@@ -44,8 +44,8 @@ IterableBitSet parse_i23(AF* aaf, std::string file) {
 IterableBitSet parse_extension(uint32_t n_args, std::string extension) {
 	std::vector<uint32_t> active_array;
 	std::vector<uint8_t> active_bitset;
-	size_t start = extension.find_first_of('{');
-    size_t end = extension.find_last_of('}');
+	size_t start = extension.find_first_of('[');
+    size_t end = extension.find_last_of(']');
     if (start == std::string::npos || end == std::string::npos || start >= end) {
         std::cerr << extension << ": Extension not well-formed!\n";
         exit(0);
@@ -60,7 +60,11 @@ IterableBitSet parse_extension(uint32_t n_args, std::string extension) {
     while (std::getline(ss, item, ',')) {
         if (!item.empty()) { // skip empty strings
             try {
-                arg = std::stoi(item)-1;
+                arg = std::stoi(item); // TODO check if within bounds
+                if (arg < 1 || arg > n_args) {
+                    std::cerr << "Argument " << arg << " is not within bound of the given AF" << std::endl;
+                }
+                arg--;
                 active_array.push_back(arg);
                 active_bitset[arg] = true;
             } catch (...) {
