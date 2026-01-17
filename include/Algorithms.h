@@ -57,51 +57,56 @@ namespace Algorithms {
     std::vector<std::vector<std::vector<uint32_t>>> enumerate_sequences_admissible_for_set(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
 
     // for XE
-    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence);
+    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics);
 
     // for VE
     /** Checks if a set of arguments is conflict-free in the given AF.
      * A set is conflict-free if no two arguments in the set attack each other.
      * 
-     * @param af            The argumentation framework.
-     * @param arguments     The set of arguments to check.
-     * @return              'true' if the set is conflict-free, 'false' otherwise.
+     * @param af                The argumentation framework.
+     * @param active_arguments  The active arguments in the current reduct.
+     * @param arguments         The set of arguments to check.
+     * @return                  'true' if the set is conflict-free, 'false' otherwise.
      */
-    bool is_conflict_free(AF & af, const IterableBitSet & arguments);
+    bool is_conflict_free(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
     /** Checks if a set of arguments is defended in the given AF.
      * An argument is defended by a set if all its attackers are attacked by at least one argument in the set.
      * 
-     * @param af            The argumentation framework.
-     * @param arguments     The set of arguments.
-     * @param argument      The argument to check.
-     * @return              'true' if the argument is defended by the set, 'false' otherwise.
+     * @param af                The argumentation framework.
+     * @param active_arguments  The active arguments in the current reduct.
+     * @param arguments         The set of arguments.
+     * @param argument          The argument to check.
+     * @return                  'true' if the argument is defended by the set, 'false' otherwise.
      */
-    bool is_defended(AF & af, const IterableBitSet & arguments, uint32_t argument);
+    bool is_defended(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, uint32_t argument);
     /** Checks if a set of arguments is admissible in the given AF.
      * A set is admissible if it is conflict-free and defends all its arguments.
      * 
-     * @param af            The argumentation framework.
-     * @param arguments     The set of arguments to check.
-     * @return              'true' if the set is admissible, 'false' otherwise.
+     * @param af                The argumentation framework.
+     * @param active_arguments  The active arguments in the current reduct.
+     * @param arguments         The set of arguments to check.
+     * @return                  'true' if the set is admissible, 'false' otherwise.
      */
-    bool is_admissible(AF & af, const IterableBitSet & arguments);
+    bool is_admissible(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
     /** Checks if a set of arguments is complete in the given AF.
      * A set is complete if it is admissible and contains all arguments it defends.
      * 
-     * @param af            The argumentation framework.
-     * @param arguments     The set of arguments to check.
-     * @return              'true' if the set is complete, 'false' otherwise.
+     * @param af                The argumentation framework.
+     * @param active_arguments  The active arguments in the current reduct.
+     * @param arguments         The set of arguments to check.
+     * @return                  'true' if the set is complete, 'false' otherwise.
      */
-    bool is_complete(AF & af, const IterableBitSet & arguments);
+    bool is_complete(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
     /** Checks if a set of arguments is stable in the given AF.
      * A set is stable if it is conflict-free and attacks all arguments not in the set.
      * 
-     * @param af            The argumentation framework.
-     * @param arguments     The set of arguments to check.
-     * @return              'true' if the set is stable, 'false' otherwise.
+     * @param af                The argumentation framework.
+     * @param active_arguments  The active arguments in the current reduct.
+     * @param arguments         The set of arguments to check.
+     * @return                  'true' if the set is stable, 'false' otherwise.
      */
-    bool is_stable(AF & af, const IterableBitSet & arguments);
-    bool is_grounded(AF & af, const IterableBitSet & arguments);
+    bool is_stable(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
+    bool is_grounded(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
     /** Checks if a set of arguments is preferred in the given AF.
      * A set is preferred if there is no admissible superset the AF.
      * Alternatively, a set is preferred if the reduct with respect to the set has no initial sets.

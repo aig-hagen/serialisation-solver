@@ -17,9 +17,9 @@ static int problems_flag = 0;
  * AS : Sequences for Argument
  * SE : Sequences for Extension
  * MA : Minimal Sequences for Argument
+ * VE : Verify Extension
  */
-enum task { XE, ES, EE, AS, SE, MA, UNKNOWN_TASK };
-enum semantics { IT, CO, ST, PR, AD, SA, GR, UC, UNKNOWN_SEM };
+enum task { XE, ES, EE, AS, SE, MA, VE, UNKNOWN_TASK };
 
 
 task string_to_task(std::string problem) {
@@ -30,6 +30,7 @@ task string_to_task(std::string problem) {
 	if (tmp == "AS") return AS;
 	if (tmp == "SE") return SE;
 	if (tmp == "MA") return MA;
+	if (tmp == "VE") return VE;
 	return UNKNOWN_TASK;
 }
 
@@ -163,20 +164,13 @@ int main(int argc, char ** argv) {
 	switch (string_to_task(task)) {
 		case XE:
 			arguments = parse_extension(aaf.args, query);
-			switch (string_to_sem(task)) {
-				case AD:
-					sequences = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
-					for (std::vector<std::vector<uint32_t>> seq : sequences) {
-						Algorithms::explain_extension(aaf, active_arguments, arguments, seq);
-						break;
-					}
-					if (sequences.empty()) {
-						std::cout << "NO\n";
-					}
-					break;
-				default:
-					std::cerr << argv[0] << ": Semantics not supported!\n";
-					return 1;
+			sequences = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
+			for (std::vector<std::vector<uint32_t>> seq : sequences) {
+				Algorithms::explain_extension(aaf, active_arguments, arguments, seq, string_to_sem(task));
+				break;
+			}
+			if (sequences.empty()) {
+				std::cout << "NO\n";
 			}
 			break;
 		case ES: // TODO what if st(F) = \emptyset
@@ -239,6 +233,33 @@ int main(int argc, char ** argv) {
 				default:
 					std::cerr << argv[0] << ": Semantics not supported!\n";
 			return 1;
+			}
+			break;
+		}
+		case VE: {
+			arguments = parse_extension(aaf.args, query);
+			bool result = false;
+			switch (string_to_sem(task)) {
+				case AD:
+					result = Algorithms::is_admissible(aaf, active_arguments, arguments);
+					break;
+				case CO:
+					result = Algorithms::is_complete(aaf, active_arguments, arguments);
+					break;
+				case ST:
+					result = Algorithms::is_stable(aaf, active_arguments, arguments);
+					break;
+				case PR:
+					result = Algorithms::is_preferred(aaf, active_arguments, arguments);
+					break;
+				default:
+					std::cerr << argv[0] << ": Semantics not supported!\n";
+					return 1;
+			}
+			if (result) {
+				std::cout << "YES\n";
+			} else {
+				std::cout << "NO\n";
 			}
 			break;
 		}

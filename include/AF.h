@@ -23,6 +23,8 @@ void add_attack(uint32_t source, uint32_t target);
 
 };
 
+enum semantics { IT, AD, CO, PR, ST, SA, GR, UC, UNKNOWN_SEM };
+
 namespace std {
 	inline void print_extension(const AF & af, const std::vector<uint32_t> & extension) {
 		std::cout << "[";
