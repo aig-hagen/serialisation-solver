@@ -27,25 +27,40 @@ To compile the solver use
 The binary can be found under `build/bin/serial-solver`
 
 ## Command-line usage
-
+The solver follows the standard ICCMA/probo2 interface.
 ```
-./serial-solver -p <task> -f <file> -fo <format>
+./serial-solver -p <task> -f <file> -a <additional>
   
-  <task>      computational problem
-  <file>      input argumentation framework
-  <format>    file format for input AF
+  <task>        computational problem
+  <file>         input argumentation framework
+  <additional>  an argument or an extension (optional)
 
 Options:
-  --help      Displays this help message.
-  --version   Prints version and author information.
-  --formats   Prints available file formats.
-  --problems  Prints available computational problems.
+  --help        Displays this help message.
+  --version     Prints version and author information.
+  --formats     Prints available file formats (only i23).
+  --problems    Prints available computational problems.
 ```
 
 Example usage:
 
 To enumerate the preferred serialisation sequences, use
 ```
-  ./serial-solver -p ES-PR -fo tgf -f <file in TGF format>
+  ./serial-solver -p ES-PR -f <file in i23 format>
 ```
 
+## Suported Problems
+- ### ES (Enumerate Sequences)
+  Enumerate all $\sigma$-serialisation sequences of the AF
+- ### EE (Enumerate Extensions)
+  Enumerate all $\sigma$-extensions of the AF
+- ### VE (Verify Extension)
+  Verifies whether the given set is a $\sigma$-extension (requires the flag -a)
+- ### AS (Argument Sequences)
+  Enumerate all serialisation sequences that accept the given argument in the final step (requires the flag -a)
+- ### SE (Sequences for Extension)
+  Enumerates all serialisation sequences for the given extension (requires the flag -a)
+- ### XE (eXplain Extension)
+  Computes an explanation for the given extension via some serialisation sequence. Output in JSON-format. (requires the flag -a)
+- ### GF (Generate False sequence)
+  generates an explanation for a randomly generated false serialisation sequence. Output in JSON-format.

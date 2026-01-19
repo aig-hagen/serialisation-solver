@@ -184,6 +184,7 @@ int main(int argc, char ** argv) {
 					arguments._bitset[arg] = true;
 				}
 			}
+			std::print_extension(aaf, arguments._array);
 			Algorithms::explain_extension(aaf, active_arguments, arguments, sequence, string_to_sem(task), afstring);
 			break;
 		case XE:

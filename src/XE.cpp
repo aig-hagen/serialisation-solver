@@ -168,7 +168,7 @@ namespace Algorithms {
         if (!Algorithms::is_complete(af, active_arguments, arguments)) {
             j["defended_not_included"] = json::array();
             for (uint32_t arg : active_arguments._array) {
-                if (arguments._bitset[i]) continue;
+                if (arguments._bitset[arg]) continue;
                 if (Algorithms::is_defended(af, active_arguments, arguments, arg)) {
                     j["defended_not_included"].push_back(arg+1);
                 }
@@ -184,8 +184,10 @@ namespace Algorithms {
         std::vector<std::vector<uint32_t>> initial_sets = Algorithms::enumerate_initial(af, std::get_reduct(af, active_arguments, arguments._array));
         if (!initial_sets.empty()) {
             j["defendable_not_included"] = json::array();
-            for (uint32_t arg : initial_sets[0]) {
-                j["defendable_not_included"].push_back(arg+1);
+            for (std::vector<uint32_t> initial_set : initial_sets) {
+                for (uint32_t arg : initial_set) {
+                    j["defendable_not_included"].push_back(arg+1);
+                }
             }
         }
 

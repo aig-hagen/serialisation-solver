@@ -6,7 +6,9 @@ int randomInt(int min, int max) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(min, max);
-    return distrib(gen);
+    int value = distrib(gen);
+    std::cout << value << std::endl;
+    return value;
 }
 
 std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, const IterableBitSet & active_arguments, semantics semantics) {
@@ -63,7 +65,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
         exit(1); // TODO handle this case
     }
 
-    switch (randomInt(0,3)) {
+    switch (randomInt(0,4)) {
         case 0: // add some argument again
         {
             size_t seq_idx = randomInt(1, sequence.size() -1);
@@ -76,7 +78,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
             size_t arg_idx = randomInt(0, candidates.size() -1);
             uint32_t arg = candidates[arg_idx];
             sequence[seq_idx].push_back(arg);
-            break; // TODO add option to replace chosen initial set
+            return sequence; // TODO add option to replace chosen initial set
         } case 1: // add some argument that is in conflict with prior arguments
         {
             int seq_idx = randomInt(1, sequence.size() -1);
@@ -95,7 +97,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
             int arg_idx = randomInt(0, candidates.size() -1);
             uint32_t arg = candidates[arg_idx];
             sequence[seq_idx].push_back(arg);
-            break; // TODO add option to replace chosen initial set
+            return sequence; // TODO add option to replace chosen initial set
         } case 2: // add a set that contains a conflict
         {
             int seq_idx = randomInt(0, sequence.size() -1);
@@ -122,7 +124,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
             }
             std::vector<uint32_t> conflict_set = { arg, candidates[randomInt(0, candidates.size() -1)] };
             sequence[seq_idx] = conflict_set;
-            break;
+            return sequence;
         } case 3: // add a set with an undefended argument
         {
             size_t seq_idx = randomInt(0, sequence.size() -1);
@@ -151,11 +153,28 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
             }
             std::vector<uint32_t> undefended_set = { candidates[randomInt(0, candidates.size() -1)] };
             sequence[seq_idx] = undefended_set;
-            break;
+            return sequence;
         } case 4: // non-complete sequence
         {
-            // TODO implement
+            for (size_t i=sequence.size()-1; i > 0; i--) {
+                IterableBitSet arguments = IterableBitSet({}, std::vector<uint8_t>(af.args, false));
+                for (size_t j=0; j < i; j++) {
+                    for (uint32_t arg : sequence[j]) {
+                        arguments._array.push_back(arg);
+                        arguments._bitset[arg] = true;
+                    }
+                }
+                if (!Algorithms::is_complete(af, active_arguments, arguments)) {
+                    std::vector<std::vector<uint32_t>> new_sequence;
+                    for (size_t j=0; j < i; j++) {
+                        new_sequence.push_back(sequence[j]);
+                    }
+                    return new_sequence;
+                }
+            }
         }
     }
-    return sequence;
+    std::cerr << "Failed to generate for instance. try again" << std::endl;
+    exit(1);
+    
 }
