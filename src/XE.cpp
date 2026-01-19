@@ -120,7 +120,7 @@ namespace Algorithms {
         return step;
     }
 
-    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics) {
+    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring) {
         std::unordered_set<uint32_t> attackers_total = {};
         for (uint32_t a : arguments._array) {
             for (uint32_t b : af.attackers[a]) {
@@ -163,6 +163,7 @@ namespace Algorithms {
         j["num_steps"] = sequence.size();
         j["semantics"] = semantics;
         j["steps"] = steps;
+        j["af"] = afstring;
 
         if (!Algorithms::is_complete(af, active_arguments, arguments)) {
             j["defended_not_included"] = json::array();

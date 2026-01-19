@@ -3,6 +3,8 @@
 #include <getopt.h>			// Parsing commandline options
 
 #include <iostream>			//std::cout
+#include <sstream>
+#include <fstream>
 
 static int version_flag = 0;
 static int usage_flag = 0;
@@ -164,6 +166,13 @@ int main(int argc, char ** argv) {
 	std::vector<std::vector<uint32_t>> sequence;
 	std::vector<std::vector<uint32_t>> extensions;
 	IterableBitSet arguments;
+	
+	// parse AF to string
+	std::stringstream buffer;
+	std:: ifstream f(file);
+	buffer << f.rdbuf();
+	std::string afstring = buffer.str();
+
 	switch (string_to_task(task)) {
 		case GF:
 			sequence = Algorithms::generate_false_sequence(aaf, active_arguments, string_to_sem(task));
@@ -175,13 +184,13 @@ int main(int argc, char ** argv) {
 					arguments._bitset[arg] = true;
 				}
 			}
-			Algorithms::explain_extension(aaf, active_arguments, arguments, sequence, string_to_sem(task));
+			Algorithms::explain_extension(aaf, active_arguments, arguments, sequence, string_to_sem(task), afstring);
 			break;
 		case XE:
 			arguments = parse_extension(aaf.args, query);
 			sequences = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
 			for (std::vector<std::vector<uint32_t>> seq : sequences) {
-				Algorithms::explain_extension(aaf, active_arguments, arguments, seq, string_to_sem(task));
+				Algorithms::explain_extension(aaf, active_arguments, arguments, seq, string_to_sem(task), afstring);
 				break;
 			}
 			if (sequences.empty()) {
