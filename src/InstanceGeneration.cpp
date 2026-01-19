@@ -146,7 +146,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
                 }
             }
             if (candidates.empty()) {
-                std::cerr << "no candidate for adding conflict" << std::endl;
+                std::cerr << "no candidate for adding undefended argument" << std::endl;
                 exit(1); // TODO handle this case
             }
             std::vector<uint32_t> undefended_set = { candidates[randomInt(0, candidates.size() -1)] };
@@ -154,7 +154,7 @@ std::vector<std::vector<uint32_t>> Algorithms::generate_false_sequence(AF & af, 
             break;
         } case 4: // non-complete sequence
         {
-
+            // TODO implement
         }
     }
     return sequence;
