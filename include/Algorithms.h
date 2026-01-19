@@ -6,6 +6,10 @@
 #include <stack>
 
 namespace Algorithms {
+    // for GF
+    std::vector<std::vector<uint32_t>> generate_false_sequence(AF & af, const IterableBitSet & active_arguments, semantics semantics);
+
+
     // for EE
     void enumerate_extensions_admissible(AF & af, const IterableBitSet & active_arguments);
     // for ES

@@ -11,6 +11,7 @@ static int problems_flag = 0;
 
 /**
  * Tasks:
+ * GF : Generate False sequence
  * XE :	eXplain Extension
  * ES :	Enumerate Serialisation Sequences
  * EE : Enumerate Extensions
@@ -19,11 +20,12 @@ static int problems_flag = 0;
  * MA : Minimal Sequences for Argument
  * VE : Verify Extension
  */
-enum task { XE, ES, EE, AS, SE, MA, VE, UNKNOWN_TASK };
+enum task { GF, XE, ES, EE, AS, SE, MA, VE, UNKNOWN_TASK };
 
 
 task string_to_task(std::string problem) {
 	std::string tmp = problem.substr(0, problem.find("-"));
+	if (tmp == "GF") return GF;
 	if (tmp == "XE") return XE;
 	if (tmp == "ES") return ES;
 	if (tmp == "EE") return EE;
@@ -159,9 +161,22 @@ int main(int argc, char ** argv) {
 	AF aaf = AF();
 	IterableBitSet active_arguments = parse_i23(&aaf, file);
 	std::vector<std::vector<std::vector<uint32_t>>> sequences;
+	std::vector<std::vector<uint32_t>> sequence;
 	std::vector<std::vector<uint32_t>> extensions;
 	IterableBitSet arguments;
 	switch (string_to_task(task)) {
+		case GF:
+			sequence = Algorithms::generate_false_sequence(aaf, active_arguments, string_to_sem(task));
+			arguments = IterableBitSet({}, std::vector<uint8_t>(aaf.args, false));
+			for (std::vector<uint32_t> set : sequence) {
+				for (uint32_t arg : set) {
+					if (arguments._bitset[arg]) continue;
+					arguments._array.push_back(arg);
+					arguments._bitset[arg] = true;
+				}
+			}
+			Algorithms::explain_extension(aaf, active_arguments, arguments, sequence, string_to_sem(task));
+			break;
 		case XE:
 			arguments = parse_extension(aaf.args, query);
 			sequences = Algorithms::enumerate_sequences_admissible_for_set(aaf, active_arguments, arguments);
