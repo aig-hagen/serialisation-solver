@@ -1,8 +1,8 @@
 #include "Algorithms.h"
-#include "json.hpp"
 #include <unordered_set>
+#include "Transformers.h"
 
-using json = nlohmann::json;
+
 
 namespace Algorithms {
     json explain_step(AF & af, const IterableBitSet & active_arguments, const std::unordered_set<uint32_t> & attackers_total, const IterableBitSet & prior, const std::vector<uint32_t> & set, semantics semantics) {
@@ -120,7 +120,7 @@ namespace Algorithms {
         return step;
     }
 
-    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring) {
+    json explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring) {
         std::unordered_set<uint32_t> attackers_total = {};
         for (uint32_t a : arguments._array) {
             for (uint32_t b : af.attackers[a]) {
@@ -135,10 +135,14 @@ namespace Algorithms {
         IterableBitSet reduct = std::get_reduct(af, active_arguments, {});
         IterableBitSet prior = IterableBitSet({}, std::vector<uint8_t>(af.args, false));
 
+        bool valid_sequence = true;
         for (std::vector<uint32_t> set : sequence) {
             json step;
             step["id"] = i++;
             step = explain_step(af, reduct, attackers_total, prior, set, semantics);
+            if (!step["valid"].get<bool>()) {
+                valid_sequence = false;
+            }
             reduct = std::get_reduct(af,reduct,set);
             for (uint32_t arg : set) {
                 if (prior._bitset[arg]) continue;
@@ -164,6 +168,7 @@ namespace Algorithms {
         j["semantics"] = semantics;
         j["steps"] = steps;
         j["af"] = afstring;
+        j["valid_sequence"] = valid_sequence;
 
         if (!Algorithms::is_complete(af, active_arguments, arguments)) {
             j["defended_not_included"] = json::array();
@@ -191,6 +196,81 @@ namespace Algorithms {
             }
         }
 
-        std::cout << std::setw(4) << j << std::endl;
+        return j;
+        //std::cout << std::setw(4) << j << std::endl;
+    }
+
+    json explain_sequence_step(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & step, std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring) {
+        json j;
+        IterableBitSet prior = tl::to_ext(af, sequence);
+        j["prior_steps"] = explain_extension(af, active_arguments, prior, sequence, semantics, afstring);
+        std::unordered_set<uint32_t> attackers_total = {};
+        for (uint32_t a : prior._array) {
+            for (uint32_t b : af.attackers[a]) {
+                if (active_arguments._bitset[b]) {
+                    attackers_total.insert(b);
+                }
+            }
+        }
+        for (uint32_t arg : step._array) {
+            for (uint32_t b : af.attackers[arg]) {
+                if (active_arguments._bitset[b]) {
+                    attackers_total.insert(b);
+                }
+            }
+        }
+
+        IterableBitSet reduct = std::get_reduct(af, active_arguments, prior._array);
+        json st = explain_step(af, reduct, attackers_total, prior, step._array, semantics);
+
+        for (uint32_t arg : step._array) {
+            if (prior._bitset[arg]) continue;
+            prior._bitset[arg] = true;
+            prior._array.push_back(arg);
+        }
+        st["conflictfree"] = Algorithms::is_conflict_free(af, active_arguments, prior);
+        st["admissible"] = Algorithms::is_admissible(af, active_arguments, prior);
+        st["complete"] = Algorithms::is_complete(af, active_arguments, prior);
+        st["preferred"] = Algorithms::is_preferred(af, active_arguments, prior);
+        st["stable"] = Algorithms::is_stable(af, active_arguments, prior);
+
+        j["main_step"] = st;
+
+        j["extension"] = json::array();
+        for (uint32_t arg : prior._array) {
+            j["extension"].push_back(arg+1);
+        }
+        j["semantics"] = semantics;
+        j["af"] = afstring;
+        j["valid_sequence"] = j["prior_steps"]["valid_sequence"];
+        j["valid_step"] = j["main_step"]["valid"];
+
+        if (!Algorithms::is_complete(af, active_arguments, prior)) {
+            j["defended_not_included"] = json::array();
+            for (uint32_t arg : active_arguments._array) {
+                if (prior._bitset[arg]) continue;
+                if (Algorithms::is_defended(af, active_arguments, prior, arg)) {
+                    j["defended_not_included"].push_back(arg+1);
+                }
+            }
+        }
+        if (!Algorithms::is_stable(af, active_arguments, prior)) {
+            j["unattacked_not_included"] = json::array();
+            for (uint32_t arg : std::get_reduct(af, active_arguments, prior._array)._array) {
+                j["unattacked_not_included"].push_back(arg+1);
+            }
+        }
+
+        std::vector<std::vector<uint32_t>> initial_sets = Algorithms::enumerate_initial(af, std::get_reduct(af, active_arguments, prior._array));
+        if (!initial_sets.empty()) {
+            j["defendable_not_included"] = json::array();
+            for (std::vector<uint32_t> initial_set : initial_sets) {
+                for (uint32_t arg : initial_set) {
+                    j["defendable_not_included"].push_back(arg+1);
+                }
+            }
+        }
+
+        return j;
     }
 }

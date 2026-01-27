@@ -4,6 +4,9 @@
 #include "Encodings.h"
 
 #include <stack>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 namespace Algorithms {
     // for GF
@@ -61,7 +64,10 @@ namespace Algorithms {
     std::vector<std::vector<std::vector<uint32_t>>> enumerate_sequences_admissible_for_set(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments);
 
     // for XE
-    void explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring);
+    json explain_extension(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & arguments, const std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring);
+
+    // for XS
+    json explain_sequence_step(AF & af, const IterableBitSet & active_arguments, const IterableBitSet & step, std::vector<std::vector<uint32_t>> sequence, semantics semantics, std::string afstring);
 
     // for VE
     /** Checks if a set of arguments is conflict-free in the given AF.
