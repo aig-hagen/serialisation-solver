@@ -62,5 +62,11 @@ To enumerate the preferred serialisation sequences, use
   Enumerates all serialisation sequences for the given extension (requires the flag -a)
 - ### XE (eXplain Extension)
   Computes an explanation for the given extension via some serialisation sequence. Output in JSON-format. (requires the flag -a)
+- ### XS (eXplain Sequence Step)
+  Computes an explanation for the given step for the given sequence. Output in JSON-format. (requires -a and -s)
+  Example usage:
+  ```
+    ./serial-solver -p XS-PR -f <file in i23 format> -a [5,6] -s [[1],[2,3],[4]]
+  ```
 - ### GF (Generate False sequence)
   generates an explanation for a randomly generated false serialisation sequence. Output in JSON-format.
